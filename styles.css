@@ -1,0 +1,122 @@
+/* styles.css */
+
+/* Reset básico */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  /* Estilo base del cuerpo de la página */
+  body {
+    font-family: Arial, sans-serif;
+    background: #e0f7fa;  /* tono celeste para simular el cielo */
+    color: #333;
+    padding: 20px;
+    text-align: center;
+  }
+  
+  /* Encabezado */
+  header {
+    margin-bottom: 20px;
+  }
+  
+  /* Contenedor del área de juego */
+  #game-container {
+    margin: 0 auto;
+    max-width: 400px;
+    position: relative;
+  }
+  
+  /* Área de juego: espacio donde las figuras caen */
+  #game-area {
+    position: relative;
+    width: 100%;
+    height: 500px;  /* altura del área de juego */
+    background: #fff;
+    border: 2px solid #333;
+    overflow: hidden;
+  }
+  
+  /* Dibujar divisiones verticales para representar 4 carriles */
+  #game-area::before,
+  #game-area::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    height: 100%;
+    border-left: 2px dashed #ccc;
+  }
+  
+  #game-area::before {
+    left: 25%;
+  }
+  
+  #game-area::after {
+    left: 50%;
+  }
+  
+  #game-area::after {
+    left: 75%;
+  }
+  
+  /* Zona objetivo: área en la parte inferior donde se capturan las figuras */
+  #target-zone {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 50px;
+    background: rgba(40, 167, 69, 0.2); /* verde semi-transparente */
+    border-top: 2px solid #28a745;
+  }
+  
+  /* Figuras que caen (similares a bloques de Tetris) */
+  .falling-shape {
+    position: absolute;
+    width: 60px;
+    height: 60px;
+    background: #007BFF;
+    border: 2px solid #0056b3;
+    border-radius: 5px;
+    /* Puedes variar la forma aplicando transformaciones o clases adicionales */
+  }
+  
+  /* Controles del juego */
+  #game-controls {
+    margin-top: 20px;
+  }
+  
+  #game-controls button {
+    padding: 10px 15px;
+    margin: 5px;
+    border: none;
+    background: #007BFF;
+    color: #fff;
+    font-size: 1em;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.3s;
+  }
+  
+  #game-controls button:hover {
+    background: #0056b3;
+  }
+  
+  /* Sección de desempeño */
+  #performance {
+    margin-top: 20px;
+    background: #fff;
+    padding: 15px;
+    border-radius: 8px;
+    display: inline-block;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  }
+  
+  /* Diseño responsivo */
+  @media (max-width: 480px) {
+    #game-container {
+      width: 100%;
+    }
+  }
+  

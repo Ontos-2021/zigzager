@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Zigzager Visualizer - Juego de Figuras Caídas</title>
+  <!-- Vinculación con el archivo CSS -->
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <!-- Encabezado e instrucciones -->
+  <header>
+    <h1>Zigzager Visualizer</h1>
+    <p>¡Atrapa las figuras que caen y mejora tu sentido rítmico!</p>
+    <p>Utiliza las teclas <strong>D, F, J, K</strong> para capturar las figuras en cada carril.</p>
+  </header>
+
+  <!-- Área de juego: contenedor principal donde aparecerán las figuras -->
+  <section id="game-container">
+    <div id="game-area">
+      <!-- Zona objetivo: área en la parte inferior en la que se debe capturar la figura -->
+      <div id="target-zone"></div>
+    </div>
+  </section>
+
+  <!-- Controles del juego -->
+  <section id="game-controls">
+    <button id="start">Iniciar</button>
+    <button id="pause">Pausar</button>
+    <button id="reset">Reiniciar</button>
+  </section>
+
+  <!-- Registro del desempeño del jugador -->
+  <section id="performance">
+    <h2>Desempeño del Jugador</h2>
+    <p>Aciertos: <span id="hits">0</span></p>
+    <p>Errores: <span id="misses">0</span></p>
+  </section>
+
+  <!-- Inclusión del archivo JavaScript -->
+  <script src="scripts.js"></script>
+</body>
+</html>
