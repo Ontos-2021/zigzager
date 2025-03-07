@@ -1,12 +1,16 @@
 /* Definición de variables para mantener consistencia en colores y fuentes */
 :root {
-  --color-fondo: #f0f4f8;
-  --color-primario: #007BFF;
-  --color-secundario: #0056b3;
-  --color-acierto: #28a745;
-  --color-error: #ff4d4d;
-  --color-texto: #333;
+  --color-fondo: #ffddee;
+  --color-primario: #ff3e96;
+  --color-secundario: #ff69b4;
+  --color-terciario: #ffb6c1;
+  --color-acierto: #00e676;
+  --color-error: #ff5252;
+  --color-texto: #5d1049;
   --fuente-principal: 'Roboto', sans-serif;
+  --sombra-suave: 0 4px 8px rgba(0,0,0,0.1);
+  --sombra-media: 0 8px 16px rgba(0,0,0,0.15);
+  --brillo: 0 0 15px rgba(255,255,255,0.8);
 }
 
 /* Reset básico */
@@ -19,25 +23,29 @@
 /* Estilos base para el body */
 body {
   font-family: var(--fuente-principal);
-  background: linear-gradient(135deg, #f0f4f8, #d9e2ec);
+  background: radial-gradient(circle, #ffe6f2 0%, #ffb6c1 100%);
   color: var(--color-texto);
   padding: 20px;
   text-align: center;
+  min-height: 100vh;
 }
 
 /* Encabezado */
 header {
   margin-bottom: 20px;
   padding: 20px;
-  background: #fff;
-  border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  background: linear-gradient(135deg, #fff9f9, #ffe6f2);
+  border-radius: 20px;
+  box-shadow: var(--sombra-media);
+  border: 3px solid #fff;
 }
 
 header h1 {
   font-size: 2.5em;
   margin-bottom: 10px;
   color: var(--color-primario);
+  text-shadow: 2px 2px 4px rgba(255, 105, 180, 0.3);
+  letter-spacing: 1px;
 }
 
 .subtitulo {
@@ -49,34 +57,45 @@ header h1 {
 .instrucciones {
   font-size: 1em;
   color: var(--color-texto);
+  background-color: rgba(255, 255, 255, 0.5);
+  padding: 10px;
+  border-radius: 10px;
+  margin-top: 10px;
+  display: inline-block;
 }
 
 /* Sección de configuración */
 #settings {
   margin-bottom: 15px;
-  background: #fff;
-  padding: 10px 15px;
-  border-radius: 8px;
+  background: linear-gradient(to right, #ffe6f2, #fff9f9);
+  padding: 15px;
+  border-radius: 15px;
   display: inline-block;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  box-shadow: var(--sombra-suave);
+  border: 2px solid white;
 }
 
 #settings label {
   font-weight: bold;
+  color: var(--color-primario);
 }
 
 #settings input {
-  padding: 5px;
+  padding: 8px;
   margin-left: 10px;
   width: 80px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  transition: border-color 0.3s;
+  border: 2px solid var(--color-terciario);
+  border-radius: 10px;
+  transition: all 0.3s ease;
+  text-align: center;
+  font-weight: bold;
+  color: var(--color-primario);
 }
 
 #settings input:focus {
   border-color: var(--color-primario);
   outline: none;
+  box-shadow: 0 0 10px rgba(255, 105, 180, 0.5);
 }
 
 /* Área de juego */
@@ -90,33 +109,35 @@ header h1 {
   position: relative;
   width: 100%;
   height: 500px;
-  background: #fff;
-  border: 2px solid var(--color-primario);
-  border-radius: 10px;
+  background: linear-gradient(to bottom, #fff9f9, #ffe6f2);
+  border: 4px solid var(--color-primario);
+  border-radius: 20px;
   overflow: hidden;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  box-shadow: var(--sombra-media);
 }
 
-/* Divisiones verticales para 4 carriles */
-#game-area::before,
-#game-area::after {
-  content: "";
+/* Divisiones verticales para 4 carriles con estilo candy */
+.lane-divider {
   position: absolute;
   top: 0;
   height: 100%;
-  border-left: 2px dashed #ccc;
+  width: 2px;
+  background: linear-gradient(to bottom, 
+    var(--color-terciario) 0%, 
+    var(--color-secundario) 50%, 
+    var(--color-terciario) 100%);
+  z-index: 1;
 }
 
-#game-area::before {
-  left: 25%;
-}
-
-#game-area::after {
-  left: 50%;
-}
-
-#game-area::after {
-  left: 75%;
+.lane-indicator {
+  position: absolute;
+  bottom: 70px; /* Justo encima de la zona target */
+  width: 25%;
+  text-align: center;
+  color: var(--color-texto);
+  font-weight: bold;
+  opacity: 0.7;
+  font-size: 1.2em;
 }
 
 /* Zona objetivo */
@@ -125,49 +146,113 @@ header h1 {
   bottom: 0;
   left: 0;
   width: 100%;
-  height: 50px;
-  background: rgba(40, 167, 69, 0.2);
-  border-top: 2px solid var(--color-acierto);
-  transition: background 0.3s, transform 0.3s;
+  height: 60px;
+  background: linear-gradient(to right, 
+    rgba(255, 182, 193, 0.3),
+    rgba(255, 105, 180, 0.3),
+    rgba(255, 20, 147, 0.3),
+    rgba(255, 105, 180, 0.3),
+    rgba(255, 182, 193, 0.3)
+  );
+  border-top: 3px dashed var(--color-secundario);
+  border-bottom-left-radius: 16px;
+  border-bottom-right-radius: 16px;
+  z-index: 5;
+  transition: all 0.3s ease;
 }
 
 /* Animaciones para aciertos y errores */
 @keyframes hitPulse {
-  0% { background-color: rgba(40, 167, 69, 0.2); transform: scale(1); }
-  50% { background-color: rgba(40, 167, 69, 0.5); transform: scale(1.1); }
-  100% { background-color: rgba(40, 167, 69, 0.2); transform: scale(1); }
+  0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(0, 230, 118, 0.7); }
+  50% { transform: scale(1.05); box-shadow: 0 0 20px 10px rgba(0, 230, 118, 0.5); }
+  100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(0, 230, 118, 0); }
 }
 
 .hit-animation {
-  animation: hitPulse 0.4s ease-in-out;
+  animation: hitPulse 0.5s ease-in-out;
+  background: linear-gradient(to right, 
+    rgba(0, 230, 118, 0.3),
+    rgba(0, 230, 118, 0.5),
+    rgba(0, 230, 118, 0.3)
+  ) !important;
 }
 
 @keyframes errorShake {
-  0% { transform: translateX(0); background-color: rgba(255, 77, 77, 0.2); }
+  0% { transform: translateX(0); background-color: rgba(255, 82, 82, 0.2); }
   25% { transform: translateX(-10px); }
-  50% { transform: translateX(10px); }
-  75% { transform: translateX(-10px); }
-  100% { transform: translateX(0); background-color: rgba(255, 77, 77, 0.2); }
+  50% { transform: translateX(10px); background-color: rgba(255, 82, 82, 0.5); }
+  75% { transform: translateX(-5px); }
+  100% { transform: translateX(0); background-color: rgba(255, 82, 82, 0.2); }
 }
 
 .error-animation {
-  animation: errorShake 0.4s ease-in-out;
+  animation: errorShake 0.6s ease-in-out;
+  background: linear-gradient(to right, 
+    rgba(255, 82, 82, 0.3),
+    rgba(255, 82, 82, 0.5),
+    rgba(255, 82, 82, 0.3)
+  ) !important;
 }
 
-/* Figuras que caen (bloques) */
+/* Figuras que caen (con estilo Candy Crush) */
 .falling-shape {
   position: absolute;
   width: 60px;
   height: 60px;
-  background: var(--color-primario);
-  border: 2px solid var(--color-secundario);
-  border-radius: 8px;
-  transition: transform 0.2s;
+  border-radius: 15px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+  cursor: pointer;
+  z-index: 10;
+  transition: transform 0.2s, box-shadow 0.2s;
 }
 
-/* Efecto hover opcional en las figuras (para ver interacción, aunque no sean clicables) */
+/* Estilos diferentes para cada carril (simulando caramelos diferentes) */
+.falling-shape.lane-0 {
+  background: linear-gradient(135deg, #ff3e96, #ff69b4);
+  border: 3px solid #ff87af;
+}
+
+.falling-shape.lane-1 {
+  background: linear-gradient(135deg, #00e676, #00c853);
+  border: 3px solid #69f0ae;
+}
+
+.falling-shape.lane-2 {
+  background: linear-gradient(135deg, #ffab40, #ff9100);
+  border: 3px solid #ffd180;
+}
+
+.falling-shape.lane-3 {
+  background: linear-gradient(135deg, #40c4ff, #00b0ff);
+  border: 3px solid #80d8ff;
+}
+
+/* Animación para cuando se active la forma */
+@keyframes popShape {
+  0% { transform: scale(1); }
+  50% { transform: scale(0.85); }
+  100% { transform: scale(1); }
+}
+
 .falling-shape:hover {
   transform: scale(1.05);
+  box-shadow: 0 6px 12px rgba(0,0,0,0.3);
+}
+
+.falling-shape:active,
+.falling-shape.active {
+  animation: popShape 0.2s ease-in-out;
+}
+
+/* Animación para cuando la figura es golpeada correctamente */
+@keyframes hitShape {
+  0% { transform: scale(1); opacity: 1; }
+  20% { transform: scale(1.2); opacity: 0.9; }
+  100% { transform: scale(0); opacity: 0; }
+}
+
+.shape-hit {
+  animation: hitShape 0.3s ease-out forwards;
 }
 
 /* Controles del juego */
@@ -180,44 +265,241 @@ header h1 {
 }
 
 #game-controls button {
-  padding: 10px 20px;
+  padding: 12px 25px;
   margin: 5px;
   border: none;
   background: var(--color-primario);
-  color: #fff;
-  font-size: 1em;
-  border-radius: 5px;
+  color: white;
+  font-size: 1.1em;
+  font-weight: bold;
+  border-radius: 50px;
   cursor: pointer;
-  transition: background 0.3s, transform 0.2s;
+  transition: all 0.3s ease;
+  box-shadow: var(--sombra-suave);
+  text-transform: uppercase;
+  letter-spacing: 1px;
 }
 
 #game-controls button:hover {
   background: var(--color-secundario);
-  transform: scale(1.03);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(0,0,0,0.15);
 }
 
 #game-controls button:active {
-  transform: scale(0.98);
+  transform: translateY(1px);
+  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
 }
 
 /* Sección de desempeño */
 #performance {
   margin-top: 20px;
-  background: #fff;
+  background: linear-gradient(135deg, #fff9f9, #ffe6f2);
   padding: 15px 20px;
-  border-radius: 8px;
+  border-radius: 20px;
   display: inline-block;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  box-shadow: var(--sombra-suave);
+  border: 3px solid white;
 }
 
 #performance h2 {
   margin-bottom: 10px;
   color: var(--color-primario);
+  font-size: 1.5em;
 }
 
-/* Diseño responsivo */
+#performance p {
+  margin: 5px 0;
+  font-size: 1.2em;
+  font-weight: bold;
+}
+
+#hits, #misses {
+  display: inline-block;
+  min-width: 40px;
+  padding: 5px 10px;
+  border-radius: 10px;
+  font-weight: bold;
+}
+
+#hits {
+  background-color: rgba(0, 230, 118, 0.2);
+  color: #00796b;
+}
+
+#misses {
+  background-color: rgba(255, 82, 82, 0.2);
+  color: #c62828;
+}
+
+/* Mobile controls */
+#mobile-controls {
+  display: none;
+  width: 100%;
+  margin-top: 20px;
+  justify-content: space-around;
+}
+
+.mobile-key {
+  width: 22%;
+  height: 60px;
+  background: linear-gradient(135deg, var(--color-secundario), var(--color-primario));
+  border-radius: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  font-size: 1.5em;
+  font-weight: bold;
+  box-shadow: var(--sombra-suave);
+  user-select: none;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.mobile-key:active {
+  transform: scale(0.95);
+  background: var(--color-primario);
+}
+
+/* Score popup */
+#score-popup {
+  position: fixed;
+  top: 40%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0);
+  background: white;
+  padding: 20px;
+  border-radius: 20px;
+  box-shadow: var(--sombra-media);
+  z-index: 100;
+  transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  border: 5px solid var(--color-secundario);
+  width: 280px;
+  text-align: center;
+}
+
+#score-popup.visible {
+  transform: translate(-50%, -50%) scale(1);
+}
+
+#score-popup h2 {
+  color: var(--color-primario);
+  margin-bottom: 10px;
+}
+
+#score-popup p {
+  margin: 10px 0;
+  font-size: 1.2em;
+}
+
+#score-popup button {
+  margin-top: 15px;
+  padding: 10px 20px;
+  border: none;
+  background: var(--color-primario);
+  color: white;
+  border-radius: 50px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: all 0.3s;
+}
+
+#score-popup button:hover {
+  background: var(--color-secundario);
+  transform: scale(1.05);
+}
+
+/* Combo counter */
+#combo-counter {
+  position: absolute;
+  right: 20px;
+  top: 20px;
+  background: rgba(255, 255, 255, 0.8);
+  padding: 10px 15px;
+  border-radius: 50px;
+  font-weight: bold;
+  color: var(--color-primario);
+  border: 2px solid var(--color-secundario);
+  box-shadow: var(--sombra-suave);
+  z-index: 20;
+}
+
+/* Cuenta regresiva */
+#countdown {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  font-size: 5em;
+  font-weight: bold;
+  z-index: 50;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s;
+}
+
+#countdown.visible {
+  opacity: 1;
+}
+
+/* Diseño responsive */
+@media (max-width: 768px) {
+  header h1 {
+    font-size: 2em;
+  }
+  
+  #game-area {
+    height: 400px;
+  }
+  
+  #mobile-controls {
+    display: flex;
+  }
+  
+  .instrucciones {
+    font-size: 0.9em;
+  }
+}
+
 @media (max-width: 480px) {
-  #game-container {
-    width: 100%;
+  body {
+    padding: 10px;
+  }
+  
+  header {
+    padding: 15px;
+  }
+  
+  header h1 {
+    font-size: 1.8em;
+  }
+  
+  .subtitulo {
+    font-size: 1em;
+  }
+  
+  #game-area {
+    height: 350px;
+  }
+  
+  .falling-shape {
+    width: 50px;
+    height: 50px;
+  }
+  
+  #settings input {
+    width: 60px;
+  }
+  
+  #game-controls button {
+    padding: 10px 15px;
+    font-size: 0.9em;
   }
 }
