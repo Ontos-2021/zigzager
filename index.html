@@ -3,22 +3,31 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Zigzager Visualizer - Juego de Figuras Caídas</title>
+  <meta name="description" content="Juego rítmico que mejora tu sentido musical atrapando figuras que representan patrones de batería.">
+  <title>Zigzager Visualizer - Patrón Rítmico</title>
+  <!-- Importar fuente de Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
   <!-- Vinculación con el archivo CSS -->
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <!-- Encabezado e instrucciones -->
+  <!-- Encabezado con información e instrucciones -->
   <header>
     <h1>Zigzager Visualizer</h1>
-    <p>¡Atrapa las figuras que caen y mejora tu sentido rítmico!</p>
-    <p>Utiliza las teclas <strong>D, F, J, K</strong> para capturar las figuras en cada carril.</p>
+    <p class="subtitulo">Sigue el patrón rítmico de batería atrapando las figuras que caen</p>
+    <p class="instrucciones">Utiliza las teclas <strong>D, F, J, K</strong> para capturar las figuras en cada carril.</p>
   </header>
 
-  <!-- Área de juego: contenedor principal donde aparecerán las figuras -->
+  <!-- Sección de configuración musical -->
+  <section id="settings">
+    <label for="bpm">BPM:</label>
+    <input type="number" id="bpm" value="120" min="40" max="300">
+  </section>
+
+  <!-- Área de juego -->
   <section id="game-container">
     <div id="game-area">
-      <!-- Zona objetivo: área en la parte inferior en la que se debe capturar la figura -->
+      <!-- Zona objetivo en la parte inferior -->
       <div id="target-zone"></div>
     </div>
   </section>

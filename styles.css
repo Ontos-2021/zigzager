@@ -1,122 +1,223 @@
-/* styles.css */
+/* Definición de variables para mantener consistencia en colores y fuentes */
+:root {
+  --color-fondo: #f0f4f8;
+  --color-primario: #007BFF;
+  --color-secundario: #0056b3;
+  --color-acierto: #28a745;
+  --color-error: #ff4d4d;
+  --color-texto: #333;
+  --fuente-principal: 'Roboto', sans-serif;
+}
 
 /* Reset básico */
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-  }
-  
-  /* Estilo base del cuerpo de la página */
-  body {
-    font-family: Arial, sans-serif;
-    background: #e0f7fa;  /* tono celeste para simular el cielo */
-    color: #333;
-    padding: 20px;
-    text-align: center;
-  }
-  
-  /* Encabezado */
-  header {
-    margin-bottom: 20px;
-  }
-  
-  /* Contenedor del área de juego */
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Estilos base para el body */
+body {
+  font-family: var(--fuente-principal);
+  background: linear-gradient(135deg, #f0f4f8, #d9e2ec);
+  color: var(--color-texto);
+  padding: 20px;
+  text-align: center;
+}
+
+/* Encabezado */
+header {
+  margin-bottom: 20px;
+  padding: 20px;
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+header h1 {
+  font-size: 2.5em;
+  margin-bottom: 10px;
+  color: var(--color-primario);
+}
+
+.subtitulo {
+  font-size: 1.2em;
+  margin-bottom: 5px;
+  color: var(--color-secundario);
+}
+
+.instrucciones {
+  font-size: 1em;
+  color: var(--color-texto);
+}
+
+/* Sección de configuración */
+#settings {
+  margin-bottom: 15px;
+  background: #fff;
+  padding: 10px 15px;
+  border-radius: 8px;
+  display: inline-block;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+#settings label {
+  font-weight: bold;
+}
+
+#settings input {
+  padding: 5px;
+  margin-left: 10px;
+  width: 80px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  transition: border-color 0.3s;
+}
+
+#settings input:focus {
+  border-color: var(--color-primario);
+  outline: none;
+}
+
+/* Área de juego */
+#game-container {
+  margin: 0 auto;
+  max-width: 500px;
+  position: relative;
+}
+
+#game-area {
+  position: relative;
+  width: 100%;
+  height: 500px;
+  background: #fff;
+  border: 2px solid var(--color-primario);
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+/* Divisiones verticales para 4 carriles */
+#game-area::before,
+#game-area::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  height: 100%;
+  border-left: 2px dashed #ccc;
+}
+
+#game-area::before {
+  left: 25%;
+}
+
+#game-area::after {
+  left: 50%;
+}
+
+#game-area::after {
+  left: 75%;
+}
+
+/* Zona objetivo */
+#target-zone {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 50px;
+  background: rgba(40, 167, 69, 0.2);
+  border-top: 2px solid var(--color-acierto);
+  transition: background 0.3s, transform 0.3s;
+}
+
+/* Animaciones para aciertos y errores */
+@keyframes hitPulse {
+  0% { background-color: rgba(40, 167, 69, 0.2); transform: scale(1); }
+  50% { background-color: rgba(40, 167, 69, 0.5); transform: scale(1.1); }
+  100% { background-color: rgba(40, 167, 69, 0.2); transform: scale(1); }
+}
+
+.hit-animation {
+  animation: hitPulse 0.4s ease-in-out;
+}
+
+@keyframes errorShake {
+  0% { transform: translateX(0); background-color: rgba(255, 77, 77, 0.2); }
+  25% { transform: translateX(-10px); }
+  50% { transform: translateX(10px); }
+  75% { transform: translateX(-10px); }
+  100% { transform: translateX(0); background-color: rgba(255, 77, 77, 0.2); }
+}
+
+.error-animation {
+  animation: errorShake 0.4s ease-in-out;
+}
+
+/* Figuras que caen (bloques) */
+.falling-shape {
+  position: absolute;
+  width: 60px;
+  height: 60px;
+  background: var(--color-primario);
+  border: 2px solid var(--color-secundario);
+  border-radius: 8px;
+  transition: transform 0.2s;
+}
+
+/* Efecto hover opcional en las figuras (para ver interacción, aunque no sean clicables) */
+.falling-shape:hover {
+  transform: scale(1.05);
+}
+
+/* Controles del juego */
+#game-controls {
+  margin-top: 20px;
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  flex-wrap: wrap;
+}
+
+#game-controls button {
+  padding: 10px 20px;
+  margin: 5px;
+  border: none;
+  background: var(--color-primario);
+  color: #fff;
+  font-size: 1em;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background 0.3s, transform 0.2s;
+}
+
+#game-controls button:hover {
+  background: var(--color-secundario);
+  transform: scale(1.03);
+}
+
+#game-controls button:active {
+  transform: scale(0.98);
+}
+
+/* Sección de desempeño */
+#performance {
+  margin-top: 20px;
+  background: #fff;
+  padding: 15px 20px;
+  border-radius: 8px;
+  display: inline-block;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+#performance h2 {
+  margin-bottom: 10px;
+  color: var(--color-primario);
+}
+
+/* Diseño responsivo */
+@media (max-width: 480px) {
   #game-container {
-    margin: 0 auto;
-    max-width: 400px;
-    position: relative;
-  }
-  
-  /* Área de juego: espacio donde las figuras caen */
-  #game-area {
-    position: relative;
     width: 100%;
-    height: 500px;  /* altura del área de juego */
-    background: #fff;
-    border: 2px solid #333;
-    overflow: hidden;
   }
-  
-  /* Dibujar divisiones verticales para representar 4 carriles */
-  #game-area::before,
-  #game-area::after {
-    content: "";
-    position: absolute;
-    top: 0;
-    height: 100%;
-    border-left: 2px dashed #ccc;
-  }
-  
-  #game-area::before {
-    left: 25%;
-  }
-  
-  #game-area::after {
-    left: 50%;
-  }
-  
-  #game-area::after {
-    left: 75%;
-  }
-  
-  /* Zona objetivo: área en la parte inferior donde se capturan las figuras */
-  #target-zone {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    height: 50px;
-    background: rgba(40, 167, 69, 0.2); /* verde semi-transparente */
-    border-top: 2px solid #28a745;
-  }
-  
-  /* Figuras que caen (similares a bloques de Tetris) */
-  .falling-shape {
-    position: absolute;
-    width: 60px;
-    height: 60px;
-    background: #007BFF;
-    border: 2px solid #0056b3;
-    border-radius: 5px;
-    /* Puedes variar la forma aplicando transformaciones o clases adicionales */
-  }
-  
-  /* Controles del juego */
-  #game-controls {
-    margin-top: 20px;
-  }
-  
-  #game-controls button {
-    padding: 10px 15px;
-    margin: 5px;
-    border: none;
-    background: #007BFF;
-    color: #fff;
-    font-size: 1em;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background 0.3s;
-  }
-  
-  #game-controls button:hover {
-    background: #0056b3;
-  }
-  
-  /* Sección de desempeño */
-  #performance {
-    margin-top: 20px;
-    background: #fff;
-    padding: 15px;
-    border-radius: 8px;
-    display: inline-block;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-  }
-  
-  /* Diseño responsivo */
-  @media (max-width: 480px) {
-    #game-container {
-      width: 100%;
-    }
-  }
-  
+}
