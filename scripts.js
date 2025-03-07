@@ -118,7 +118,10 @@ function createScorePopup() {
   document.getElementById("play-again").addEventListener("click", () => {
     popup.classList.remove("visible");
     resetGame();
-    setTimeout(() => startCountdown(), 500);
+    // startCountdown() se debe definir o comentar si no es necesario
+    setTimeout(() => {
+      if (typeof startCountdown === 'function') startCountdown();
+    }, 500);
   });
 }
 
@@ -199,7 +202,7 @@ function spawnShape() {
   shapeEl.style.top = `${initialY}px`;
   
   // Permitir aciertos al hacer clic (ideal para móviles)
-  shapeEl.addEventListener("click", function() {
+  shapeEl.addEventListener("click", () => {
     const targetRect = targetZone.getBoundingClientRect();
     const shapeRect = shapeEl.getBoundingClientRect();
     if (shapeRect.bottom >= targetRect.top && shapeRect.top <= targetRect.bottom) {
@@ -210,6 +213,14 @@ function spawnShape() {
   const shapeObj = { element: shapeEl, lane: lane, y: initialY };
   fallingShapes.push(shapeObj);
   gameArea.appendChild(shapeEl);
+  
+  // Animación de entrada suave
+  shapeEl.style.opacity = '0';
+  shapeEl.style.transform = 'scale(0.8) translateY(-20px)';
+  requestAnimationFrame(() => {
+      shapeEl.style.opacity = '1';
+      shapeEl.style.transform = 'scale(1) translateY(0)';
+  });
 }
 
 function gameLoop(timestamp) {
@@ -281,6 +292,11 @@ function updateCombo() {
   const comboCounter = document.getElementById("combo-counter");
   comboCounter.textContent = `Combo: ${combo}`;
   
+  // Remover clase anterior y reinicializar animación
+  comboCounter.classList.remove("combo-active");
+  void comboCounter.offsetWidth;
+  comboCounter.classList.add("combo-active");
+  
   if (combo >= 10) {
     comboCounter.style.color = "#FF4081";
     comboCounter.style.fontWeight = "bold";
@@ -318,19 +334,31 @@ function showPointsIndicator(points, lane) {
   const laneWidth = gameArea.clientWidth / NUM_LANES;
   const xPos = lane * laneWidth + laneWidth / 2;
   const targetTop = targetZone.getBoundingClientRect().top;
-  indicator.style.position = "absolute";
-  indicator.style.left = `${xPos}px`;
-  indicator.style.top = `${targetTop - 30}px`;
-  indicator.style.fontWeight = "bold";
-  indicator.style.color = "white";
-  indicator.style.textShadow = "1px 1px 2px black";
+  indicator.style.cssText = `
+      position: absolute;
+      left: ${xPos}px;
+      top: ${targetTop - 30}px;
+      font-weight: bold;
+      color: white;
+      text-shadow: 0 0 5px rgba(0,0,0,0.5);
+      font-size: ${12 + Math.min(points/100, 8)}px;
+      opacity: 0;
+      transform: translateY(0) scale(0.8);
+      transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+  `;
   
   gameArea.appendChild(indicator);
+  
+  requestAnimationFrame(() => {
+      indicator.style.opacity = '1';
+      indicator.style.transform = 'translateY(-20px) scale(1)';
+  });
+  
   setTimeout(() => {
-    if (gameArea.contains(indicator)) {
-      gameArea.removeChild(indicator);
-    }
-  }, 1000);
+      indicator.style.opacity = '0';
+      indicator.style.transform = 'translateY(-40px) scale(0.8)';
+      setTimeout(() => gameArea.removeChild(indicator), 500);
+  }, 500);
 }
 
 // =============================
