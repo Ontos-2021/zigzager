@@ -129,6 +129,7 @@ function createScorePopup() {
 // Gestión de Sonidos
 // =============================
 let kickSound, hiHatSound, snareSound, tomSound, comboSound, errorSound, countdownSound, successSound;
+let globalVolume = 1.0; // Volumen global predeterminado
 
 function loadSounds() {
   try {
@@ -141,11 +142,43 @@ function loadSounds() {
     countdownSound = new Audio('zigzager-visualizer/src/assets/sounds/countdown.wav');
     successSound = new Audio('zigzager-visualizer/src/assets/sounds/success.wav');
     
-    [kickSound, hiHatSound, snareSound, tomSound, comboSound, errorSound, countdownSound, successSound].forEach(sound => {
+    const allSounds = [kickSound, hiHatSound, snareSound, tomSound, comboSound, errorSound, countdownSound, successSound];
+    
+    // Verificar soporte de audio
+    if (!Audio) {
+      console.warn("El navegador no soporta la reproducción de audio");
+      return;
+    }
+    
+    allSounds.forEach(sound => {
       sound.load();
+      sound.volume = globalVolume;
     });
+    
+    // Inicializar control de volumen
+    const volumeControl = document.getElementById("volume");
+    if (volumeControl) {
+      volumeControl.addEventListener("input", updateVolume);
+      // Establecer volumen inicial
+      globalVolume = volumeControl.value / 100;
+      updateVolume();
+    }
   } catch (e) {
     console.warn("No se pudieron cargar los sonidos:", e);
+  }
+}
+
+function updateVolume() {
+  const volumeControl = document.getElementById("volume");
+  if (volumeControl) {
+    globalVolume = volumeControl.value / 100;
+    
+    // Aplicar volumen a todos los sonidos
+    [kickSound, hiHatSound, snareSound, tomSound, comboSound, errorSound, countdownSound, successSound]
+      .filter(sound => sound)
+      .forEach(sound => {
+        sound.volume = globalVolume;
+      });
   }
 }
 
@@ -245,7 +278,7 @@ function gameLoop(timestamp) {
   animationFrameId = requestAnimationFrame(gameLoop);
 }
 
-function registerHit(shapeElement, lane) {
+function registerHit(shapeElement, lane, timingRating = 'PERFECTO', accuracy = 1.0) {
   // Animar y reproducir sonido
   shapeElement.classList.add("shape-hit");
   playDrumSound(lane);
@@ -264,13 +297,22 @@ function registerHit(shapeElement, lane) {
   hitsDisplay.textContent = hits;
   combo++;
   updateCombo();
+  
+  // Calcular puntos basados en la precisión del hit
   const basePoints = 100;
+  const accuracyMultiplier = Math.pow(accuracy, 2) * 1.5; // Premia más la precisión
   const comboMultiplier = 1 + (combo * 0.1);
-  const hitPoints = Math.floor(basePoints * comboMultiplier);
+  const hitPoints = Math.floor(basePoints * accuracyMultiplier * comboMultiplier);
   score += hitPoints;
   
+  // Actualizar el marcador de puntuación si existe
+  const scoreDisplay = document.getElementById("score");
+  if (scoreDisplay) {
+    scoreDisplay.textContent = score;
+  }
+  
   animateHit();
-  showPointsIndicator(hitPoints, lane);
+  showPointsIndicator(hitPoints, lane, timingRating);
   
   clearTimeout(comboTimeout);
   comboTimeout = setTimeout(() => {
@@ -290,6 +332,8 @@ function registerMiss() {
 
 function updateCombo() {
   const comboCounter = document.getElementById("combo-counter");
+  if (!comboCounter) return; // Verificar que el elemento existe
+  
   comboCounter.textContent = `Combo: ${combo}`;
   
   // Remover clase anterior y reinicializar animación
@@ -326,10 +370,19 @@ function animateError() {
   setTimeout(() => targetZone.classList.remove("error-animation"), 600);
 }
 
-function showPointsIndicator(points, lane) {
+function showPointsIndicator(points, lane, timingRating = null) {
   const indicator = document.createElement("div");
   indicator.classList.add("points-indicator");
-  indicator.textContent = `+${points}`;
+  
+  // Agregar información sobre el timing
+  if (timingRating) {
+    indicator.innerHTML = `
+      <span class="timing-rating ${timingRating.toLowerCase()}">${timingRating}</span>
+      <span class="points-value">+${points}</span>
+    `;
+  } else {
+    indicator.textContent = `+${points}`;
+  }
   
   const laneWidth = gameArea.clientWidth / NUM_LANES;
   const xPos = lane * laneWidth + laneWidth / 2;
@@ -345,6 +398,10 @@ function showPointsIndicator(points, lane) {
       opacity: 0;
       transform: translateY(0) scale(0.8);
       transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      z-index: 100;
   `;
   
   gameArea.appendChild(indicator);
@@ -358,7 +415,7 @@ function showPointsIndicator(points, lane) {
       indicator.style.opacity = '0';
       indicator.style.transform = 'translateY(-40px) scale(0.8)';
       setTimeout(() => gameArea.removeChild(indicator), 500);
-  }, 500);
+  }, 800);
 }
 
 // =============================
@@ -371,9 +428,14 @@ function startGame() {
     createLaneElements();
     createMobileControls();
     loadSounds();
+    
+    // Usar deltaTime para hacer el rendering más consistente en diferentes dispositivos
     spawnIntervalId = setInterval(spawnShape, getSpawnInterval());
     lastFrameTime = null;
     animationFrameId = requestAnimationFrame(gameLoop);
+    
+    // Inicializar displays de puntuación
+    updateUI();
   }
 }
 
@@ -419,7 +481,22 @@ function checkForHit(lane) {
     if (shape.lane === lane) {
       const shapeRect = shape.element.getBoundingClientRect();
       if (shapeRect.bottom >= targetRect.top && shapeRect.top <= targetRect.bottom) {
-        registerHit(shape.element, lane);
+        // Calcular precisión del hit
+        const targetCenter = targetRect.top + targetRect.height / 2;
+        const shapeCenter = shapeRect.top + shapeRect.height / 2;
+        const distance = Math.abs(targetCenter - shapeCenter);
+        const accuracy = 1 - (distance / (targetRect.height / 2));
+        
+        let timingRating;
+        if (accuracy > 0.8) {
+          timingRating = 'PERFECTO';
+        } else if (shapeCenter < targetCenter) {
+          timingRating = 'TEMPRANO';
+        } else {
+          timingRating = 'TARDE';
+        }
+        
+        registerHit(shape.element, lane, timingRating, accuracy);
         break;
       }
     }
@@ -516,8 +593,71 @@ function updateUI() {
     // Update all UI elements based on game state
     hitsDisplay.textContent = hits;
     missesDisplay.textContent = misses;
-    document.getElementById('combo-counter').textContent = `Combo: ${combo}`;
     
-    const accuracy = hits + misses > 0 ? Math.round((hits / (hits + misses)) * 100) : 0;
-    document.getElementById('accuracy').textContent = `${accuracy}%`;
+    const comboCounter = document.getElementById('combo-counter');
+    if (comboCounter) comboCounter.textContent = `Combo: ${combo}`;
+    
+    const scoreDisplay = document.getElementById('score');
+    if (scoreDisplay) scoreDisplay.textContent = score;
+    
+    const accuracyDisplay = document.getElementById('accuracy');
+    if (accuracyDisplay) {
+        const accuracy = hits + misses > 0 ? Math.round((hits / (hits + misses)) * 100) : 0;
+        accuracyDisplay.textContent = `${accuracy}%`;
+    }
 }
+
+// Implementación de la función startCountdown
+function startCountdown() {
+  const countdownEl = document.getElementById("countdown");
+  gameState = 'countdown';
+  
+  // Reset game state
+  resetGame();
+  
+  // Mostrar elemento de cuenta atrás
+  countdownEl.style.display = "flex";
+  countdownEl.style.opacity = "1";
+  
+  // Secuencia de cuenta atrás: 3, 2, 1, ¡YA!
+  const countValues = [3, 2, 1, "¡YA!"];
+  let currentIndex = 0;
+  
+  function showNextCount() {
+    if (currentIndex < countValues.length) {
+      countdownEl.textContent = countValues[currentIndex];
+      countdownEl.classList.add("countdown-animation");
+      
+      // Reproducir sonido para cada número
+      playGameSound('countdown');
+      
+      setTimeout(() => {
+        countdownEl.classList.remove("countdown-animation");
+        currentIndex++;
+        setTimeout(showNextCount, 300); // Pequeña pausa entre animaciones
+      }, 700); // Duración de cada número
+    } else {
+      // Cuenta atrás terminada, iniciar juego
+      countdownEl.style.opacity = "0";
+      setTimeout(() => {
+        countdownEl.style.display = "none";
+        gameState = 'playing';
+        startGame();
+      }, 500);
+    }
+  }
+  
+  // Comenzar secuencia
+  showNextCount();
+}
+
+// Actualizar el gestor de BPM para que los cambios tengan efecto inmediatamente
+bpmInput.addEventListener("change", function() {
+  bpm = parseInt(this.value);
+  
+  // Si el juego está en marcha, actualizar el intervalo de generación
+  if (gameRunning && spawnIntervalId) {
+    clearInterval(spawnIntervalId);
+    spawnIntervalId = setInterval(spawnShape, getSpawnInterval());
+  }
+});
