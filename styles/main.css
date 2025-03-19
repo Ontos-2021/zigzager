@@ -1,11 +1,11 @@
 :root {
-    /* Paleta de colores */
-    --primary-color: #ff3e96;
-    --secondary-color: #3498db;
-    --accent-color: #2ecc71;
-    --background-color: #121212;
-    --text-color: #f1f1f1;
-    --error-color: #e74c3c;
+    /* Paleta de colores más alegre */
+    --primary-color: #FF6B6B;
+    --secondary-color: #4ECDC4;
+    --accent-color: #FFD166;
+    --background-color: #292F36;
+    --text-color: #F7FFF7;
+    --error-color: #FF6B6B;
     
     /* Tamaños */
     --header-height: 100px;
@@ -27,7 +27,7 @@
 
 body {
     font-family: var(--body-font);
-    background-color: var(--background-color);
+    background: linear-gradient(135deg, #292F36 0%, #423E5C 100%);
     color: var(--text-color);
     line-height: 1.6;
     overflow-x: hidden;

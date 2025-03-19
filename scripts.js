@@ -661,3 +661,40 @@ bpmInput.addEventListener("change", function() {
     spawnIntervalId = setInterval(spawnShape, getSpawnInterval());
   }
 });
+
+function setupTouchControls() {
+    const gameArea = document.getElementById('game-area');
+    const gameWidth = gameArea.clientWidth;
+    const laneWidth = gameWidth / NUM_LANES;
+
+    gameArea.addEventListener('touchstart', function(e) {
+        e.preventDefault();
+        const touch = e.touches[0];
+        const touchX = touch.clientX - gameArea.getBoundingClientRect().left;
+        const laneIndex = Math.floor(touchX / laneWidth);
+
+        // Verificar que el índice sea válido
+        if (laneIndex >= 0 && laneIndex < NUM_LANES) {
+            checkForHit(laneIndex);
+
+            // Feedback visual
+            const indicator = document.querySelector(`.lane-indicator:nth-child(${laneIndex + 1})`);
+            if (indicator) {
+                indicator.classList.add('active');
+                setTimeout(() => indicator.classList.remove('active'), 100);
+            }
+        }
+    });
+}
+
+// Llamar esta función al inicio del juego
+function init() {
+    // ...existing code...
+
+    // Detectar si es dispositivo móvil
+    const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+    if (isMobile) {
+        setupTouchControls();
+        document.body.classList.add('mobile-device');
+    }
+}

@@ -9,11 +9,14 @@
     background-color: rgba(0, 0, 0, 0.2);
     border-radius: 8px;
     margin-bottom: 20px;
+    flex-wrap: wrap;
 }
 
 #settings {
     display: flex;
     gap: 30px;
+    flex-wrap: wrap;
+    justify-content: center;
 }
 
 .setting-group {
@@ -274,4 +277,37 @@ input[type="range"]::-webkit-slider-thumb:hover {
 .pause-content .game-button {
     width: 100%;
     margin-bottom: 15px;
+}
+
+/* Media queries para adaptación móvil */
+@media (max-width: 768px) {
+    .game-wrapper {
+        padding: 10px;
+    }
+    .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    .welcome-content, .tutorial-content, .pause-content {
+        max-width: 90%;
+        padding: 20px;
+    }
+}
+
+@media (max-width: 480px) {
+    .game-button {
+        padding: 8px 14px;
+        font-size: 14px;
+    }
+    .stat-box {
+        padding: 10px;
+    }
+    .stat-value {
+        font-size: 18px;
+    }
+    #control-panel {
+        padding: 10px;
+    }
+    .setting-group {
+        margin-bottom: 10px;
+    }
 }

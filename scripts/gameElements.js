@@ -12,7 +12,11 @@ class GameElementsManager {
     initialize() {
         this.gameArea = document.getElementById('game-area');
         this.targetZone = document.getElementById('target-zone');
+        adjustForScreenSize();
         this.createLanes();
+
+        // Agregar listener para cambios de tamaño
+        window.addEventListener('resize', adjustForScreenSize);
     }
 
     createLanes() {
@@ -81,6 +85,17 @@ class GameElementsManager {
             effect.remove();
         }, 300);
     }
+}
+
+function adjustForScreenSize() {
+    const isMobile = window.innerWidth <= 768;
+    const isSmallMobile = window.innerWidth <= 480;
+
+    // Ajustar tamaño de notas
+    const noteSize = isSmallMobile ? 25 : (isMobile ? 30 : 35);
+
+    // Aplicar estilos dinámicos
+    document.documentElement.style.setProperty('--note-size', `${noteSize}px`);
 }
 
 export const elementsManager = new GameElementsManager();
