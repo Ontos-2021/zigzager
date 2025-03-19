@@ -1,0 +1,277 @@
+/* Estilos para interfaces y controles de usuario */
+
+/* Panel de control */
+#control-panel {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 15px;
+    background-color: rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+
+#settings {
+    display: flex;
+    gap: 30px;
+}
+
+.setting-group {
+    display: flex;
+    align-items: center;
+}
+
+.setting-group label {
+    margin-right: 10px;
+    font-weight: bold;
+}
+
+/* Inputs estilizados */
+input[type="number"] {
+    background-color: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 4px;
+    color: var(--text-color);
+    padding: 8px 12px;
+    width: 80px;
+    font-size: 16px;
+}
+
+input[type="range"] {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 150px;
+    height: 10px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 5px;
+    outline: none;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 20px;
+    height: 20px;
+    background: var(--primary-color);
+    border-radius: 50%;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+input[type="range"]::-webkit-slider-thumb:hover {
+    background: var(--accent-color);
+}
+
+/* Controles del juego */
+#game-controls {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin: 20px 0;
+}
+
+.game-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    background-color: rgba(255, 255, 255, 0.1);
+    color: var(--text-color);
+    font-size: 16px;
+    transition: all 0.2s;
+}
+
+.game-button:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+    transform: translateY(-2px);
+}
+
+.game-button.primary {
+    background-color: var(--accent-color);
+    color: #111;
+}
+
+.game-button.primary:hover {
+    background-color: #27ae60;
+}
+
+.button-icon {
+    font-size: 20px;
+}
+
+/* Estadísticas */
+#performance {
+    margin-top: 30px;
+}
+
+#performance h2 {
+    text-align: center;
+    margin-bottom: 15px;
+}
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 15px;
+}
+
+.stat-box {
+    background-color: rgba(0, 0, 0, 0.2);
+    padding: 15px;
+    border-radius: 8px;
+    text-align: center;
+}
+
+.stat-label {
+    display: block;
+    font-size: 14px;
+    margin-bottom: 5px;
+    opacity: 0.8;
+}
+
+.stat-value {
+    display: block;
+    font-size: 24px;
+    font-weight: bold;
+}
+
+/* Overlays */
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.9);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+/* Pantalla de bienvenida */
+.welcome-content {
+    text-align: center;
+    padding: 40px;
+    background-color: rgba(20, 20, 20, 0.8);
+    border-radius: 10px;
+    max-width: 500px;
+    animation: fadeIn 0.5s;
+}
+
+.welcome-content h1 {
+    font-size: 42px;
+    margin-bottom: 20px;
+    animation: titleIn 0.8s;
+}
+
+.welcome-content p {
+    font-size: 18px;
+    margin-bottom: 30px;
+    opacity: 0.8;
+}
+
+.welcome-content button {
+    display: block;
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 15px;
+    background-color: var(--accent-color);
+    color: #111;
+    border: none;
+    border-radius: 5px;
+    font-size: 18px;
+    transition: all 0.2s;
+}
+
+.welcome-content button:hover {
+    background-color: #27ae60;
+    transform: translateY(-2px);
+}
+
+.welcome-content button:last-child {
+    background-color: transparent;
+    border: 2px solid var(--primary-color);
+    color: var(--primary-color);
+}
+
+.welcome-content button:last-child:hover {
+    background-color: rgba(255, 62, 150, 0.1);
+}
+
+/* Tutorial */
+.tutorial-content {
+    padding: 40px;
+    background-color: rgba(20, 20, 20, 0.8);
+    border-radius: 10px;
+    max-width: 600px;
+    animation: fadeIn 0.5s;
+}
+
+.tutorial-content h2 {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.tutorial-steps {
+    margin-bottom: 30px;
+}
+
+.step {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.step-number {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: var(--primary-color);
+    color: #111;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 20px;
+    margin-right: 20px;
+    flex-shrink: 0;
+}
+
+.tutorial-content button {
+    display: block;
+    width: 200px;
+    margin: 0 auto;
+    padding: 10px;
+    background-color: var(--accent-color);
+    color: #111;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    transition: all 0.2s;
+}
+
+.tutorial-content button:hover {
+    background-color: #27ae60;
+    transform: translateY(-2px);
+}
+
+/* Pantalla de pausa */
+.pause-content {
+    text-align: center;
+    padding: 40px;
+    background-color: rgba(20, 20, 20, 0.8);
+    border-radius: 10px;
+    max-width: 400px;
+}
+
+.pause-content h2 {
+    margin-bottom: 30px;
+}
+
+.pause-content .game-button {
+    width: 100%;
+    margin-bottom: 15px;
+}

@@ -1,0 +1,119 @@
+:root {
+    /* Paleta de colores */
+    --primary-color: #ff3e96;
+    --secondary-color: #3498db;
+    --accent-color: #2ecc71;
+    --background-color: #121212;
+    --text-color: #f1f1f1;
+    --error-color: #e74c3c;
+    
+    /* Tamaños */
+    --header-height: 100px;
+    --control-panel-height: 60px;
+    --footer-height: 50px;
+    --game-height: calc(100vh - var(--header-height) - var(--control-panel-height) - var(--footer-height) - 80px);
+    
+    /* Fuentes */
+    --title-font: 'Poppins', sans-serif;
+    --body-font: 'Roboto', sans-serif;
+}
+
+/* Estilos básicos */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: var(--body-font);
+    background-color: var(--background-color);
+    color: var(--text-color);
+    line-height: 1.6;
+    overflow-x: hidden;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: var(--title-font);
+    font-weight: 800;
+    margin-bottom: 0.5em;
+    color: var(--primary-color);
+}
+
+button {
+    cursor: pointer;
+    font-family: var(--body-font);
+    font-weight: bold;
+}
+
+.hidden {
+    display: none !important;
+}
+
+/* Layout principal */
+.game-wrapper {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+/* Header */
+header {
+    text-align: center;
+    padding-bottom: 20px;
+}
+
+header h1 {
+    font-size: 2.5rem;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+.subtitulo {
+    font-size: 1.1rem;
+    margin-bottom: 15px;
+}
+
+.instrucciones {
+    font-size: 0.9rem;
+    opacity: 0.8;
+}
+
+/* Teclas */
+kbd {
+    background-color: #333;
+    border-radius: 3px;
+    border: 1px solid #666;
+    color: white;
+    display: inline-block;
+    font-family: monospace;
+    font-size: 0.9em;
+    padding: 0.1em 0.5em;
+    margin: 0 0.2em;
+}
+
+/* Footer */
+footer {
+    text-align: center;
+    padding: 20px;
+    margin-top: 30px;
+    opacity: 0.7;
+    font-size: 0.9rem;
+}
+
+.social-links {
+    margin-top: 10px;
+}
+
+.social-links a {
+    color: var(--text-color);
+    text-decoration: none;
+    margin: 0 10px;
+    transition: color 0.3s;
+}
+
+.social-links a:hover {
+    color: var(--primary-color);
+}
