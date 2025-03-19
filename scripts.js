@@ -365,6 +365,7 @@ function showPointsIndicator(points, lane) {
 // Control del Juego
 // =============================
 function startGame() {
+  if (gameState !== 'playing') return;
   if (!gameRunning) {
     gameRunning = true;
     createLaneElements();
@@ -377,6 +378,7 @@ function startGame() {
 }
 
 function pauseGame() {
+  if (gameState !== 'playing') return;
   gameRunning = false;
   clearInterval(spawnIntervalId);
   cancelAnimationFrame(animationFrameId);
@@ -401,6 +403,7 @@ function resetGame() {
   hitsDisplay.textContent = hits;
   missesDisplay.textContent = misses;
   updateCombo();
+  updateUI();
 }
 
 // =============================
@@ -446,3 +449,75 @@ gameArea.addEventListener("click", e => {
     checkForHit(lane);
   }
 });
+
+// New Game State Management
+let gameState = 'welcome'; // welcome, tutorial, playing, paused, ended
+
+// DOM Elements
+const welcomeScreen = document.getElementById('welcome-screen');
+const tutorialScreen = document.getElementById('tutorial');
+const pauseScreen = document.getElementById('pause-screen');
+const startGameBtn = document.getElementById('start-game');
+const howToPlayBtn = document.getElementById('how-to-play');
+const closeTutorialBtn = document.getElementById('close-tutorial');
+const resumeBtn = document.getElementById('resume');
+const restartBtn = document.getElementById('restart');
+const exitBtn = document.getElementById('exit');
+
+// Event Listeners for New UI
+startGameBtn.addEventListener('click', () => {
+    welcomeScreen.classList.add('hidden');
+    gameState = 'playing';
+    startGame();
+});
+
+howToPlayBtn.addEventListener('click', () => {
+    welcomeScreen.classList.add('hidden');
+    tutorialScreen.classList.remove('hidden');
+    gameState = 'tutorial';
+});
+
+closeTutorialBtn.addEventListener('click', () => {
+    tutorialScreen.classList.add('hidden');
+    welcomeScreen.classList.remove('hidden');
+    gameState = 'welcome';
+});
+
+// Pause Game Management
+document.getElementById('pause').addEventListener('click', () => {
+    if (gameState === 'playing') {
+        pauseGame();
+        pauseScreen.classList.remove('hidden');
+        gameState = 'paused';
+    }
+});
+
+resumeBtn.addEventListener('click', () => {
+    pauseScreen.classList.add('hidden');
+    gameState = 'playing';
+    startGame();
+});
+
+restartBtn.addEventListener('click', () => {
+    pauseScreen.classList.add('hidden');
+    resetGame();
+    startGame();
+    gameState = 'playing';
+});
+
+exitBtn.addEventListener('click', () => {
+    pauseScreen.classList.add('hidden');
+    resetGame();
+    welcomeScreen.classList.remove('hidden');
+    gameState = 'welcome';
+});
+
+function updateUI() {
+    // Update all UI elements based on game state
+    hitsDisplay.textContent = hits;
+    missesDisplay.textContent = misses;
+    document.getElementById('combo-counter').textContent = `Combo: ${combo}`;
+    
+    const accuracy = hits + misses > 0 ? Math.round((hits / (hits + misses)) * 100) : 0;
+    document.getElementById('accuracy').textContent = `${accuracy}%`;
+}

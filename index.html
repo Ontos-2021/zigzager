@@ -1,52 +1,145 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Juego rítmico que mejora tu sentido musical atrapando figuras que representan patrones de batería.">
-  <title>Zigzager Visualizer - Patrón Rítmico</title>
-  <!-- Importar fuente de Google Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
-  <!-- Vinculación con el archivo CSS -->
-  <link rel="stylesheet" href="styles.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Juego rítmico que mejora tu sentido musical atrapando figuras que representan patrones de batería.">
+    <meta name="theme-color" content="#ff3e96">
+    <title>Zigzager Visualizer - Patrón Rítmico</title>
+    <!-- Fuentes -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Poppins:wght@600;800&display=swap" rel="stylesheet">
+    <!-- Estilos -->
+    <link rel="stylesheet" href="styles.css">
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="zigzager-visualizer/src/assets/favicon.png">
 </head>
 <body>
-  <!-- Encabezado con información e instrucciones -->
-  <header>
-    <h1>Zigzager Visualizer</h1>
-    <p class="subtitulo">Sigue el patrón rítmico de batería atrapando las figuras que caen.</p>
-    <p class="instrucciones">Utiliza las teclas <strong>D, F, J, K</strong> para capturar las figuras en cada carril.</p>
-  </header>
-
-  <!-- Sección de configuración musical -->
-  <section id="settings">
-    <label for="bpm">BPM:</label>
-    <input type="number" id="bpm" value="120" min="40" max="300">
-  </section>
-
-  <!-- Área de juego -->
-  <section id="game-container">
-    <div id="game-area">
-      <!-- Zona objetivo en la parte inferior -->
-      <div id="target-zone"></div>
+    <!-- Overlay para la pantalla de inicio -->
+    <div id="welcome-screen" class="overlay">
+        <div class="welcome-content">
+            <h1>Zigzager Visualizer</h1>
+            <p>¡Mejora tu sentido del ritmo!</p>
+            <button id="start-game">Comenzar</button>
+            <button id="how-to-play">Cómo Jugar</button>
+        </div>
     </div>
-  </section>
 
-  <!-- Controles del juego -->
-  <section id="game-controls">
-    <button id="start">Iniciar</button>
-    <button id="pause">Pausar</button>
-    <button id="reset">Reiniciar</button>
-  </section>
+    <!-- Tutorial/How to play overlay -->
+    <div id="tutorial" class="overlay hidden">
+        <div class="tutorial-content">
+            <h2>Cómo Jugar</h2>
+            <div class="tutorial-steps">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <p>Usa las teclas <kbd>D</kbd> <kbd>F</kbd> <kbd>J</kbd> <kbd>K</kbd> para cada carril</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <p>Golpea las figuras cuando lleguen a la zona marcada</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <p>Mantén el combo para multiplicar tu puntuación</p>
+                </div>
+            </div>
+            <button id="close-tutorial">¡Entendido!</button>
+        </div>
+    </div>
 
-  <!-- Registro del desempeño del jugador -->
-  <section id="performance">
-    <h2>Desempeño del Jugador</h2>
-    <p>Aciertos: <span id="hits">0</span></p>
-    <p>Errores: <span id="misses">0</span></p>
-  </section>
+    <!-- Contenido principal -->
+    <main class="game-wrapper">
+        <!-- Encabezado -->
+        <header>
+            <h1>Zigzager Visualizer</h1>
+            <p class="subtitulo">Sigue el patrón rítmico de batería atrapando las figuras que caen</p>
+            <p class="instrucciones">Utiliza las teclas <kbd>D</kbd> <kbd>F</kbd> <kbd>J</kbd> <kbd>K</kbd> para capturar las figuras en cada carril</p>
+        </header>
 
+        <!-- Panel de control -->
+        <section id="control-panel">
+            <div id="settings">
+                <div class="setting-group">
+                    <label for="bpm">BPM:</label>
+                    <input type="number" id="bpm" value="120" min="40" max="300">
+                </div>
+                <div class="setting-group">
+                    <label for="volume">Volumen:</label>
+                    <input type="range" id="volume" min="0" max="100" value="80">
+                </div>
+            </div>
+        </section>
+
+        <!-- Área de juego -->
+        <section id="game-container">
+            <div id="game-area">
+                <div id="target-zone"></div>
+                <div id="combo-display">
+                    <span id="combo-number">0</span>
+                    <span id="combo-text">COMBO</span>
+                </div>
+                <div id="score-display">0</div>
+            </div>
+        </section>
+
+        <!-- Controles del juego -->
+        <section id="game-controls">
+            <button id="start" class="game-button primary">
+                <span class="button-icon">▶</span>
+                <span class="button-text">Iniciar</span>
+            </button>
+            <button id="pause" class="game-button">
+                <span class="button-icon">⏸</span>
+                <span class="button-text">Pausar</span>
+            </button>
+            <button id="reset" class="game-button">
+                <span class="button-icon">↺</span>
+                <span class="button-text">Reiniciar</span>
+            </button>
+        </section>
+
+        <!-- Estadísticas del jugador -->
+        <section id="performance">
+            <h2>Estadísticas</h2>
+            <div class="stats-grid">
+                <div class="stat-box">
+                    <span class="stat-label">Aciertos</span>
+                    <span id="hits" class="stat-value">0</span>
+                </div>
+                <div class="stat-box">
+                    <span class="stat-label">Errores</span>
+                    <span id="misses" class="stat-value">0</span>
+                </div>
+                <div class="stat-box">
+                    <span class="stat-label">Precisión</span>
+                    <span id="accuracy" class="stat-value">0%</span>
+                </div>
+                <div class="stat-box">
+                    <span class="stat-label">Máx. Combo</span>
+                    <span id="max-combo" class="stat-value">0</span>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Pantalla de pausa -->
+    <div id="pause-screen" class="overlay hidden">
+        <div class="pause-content">
+            <h2>Juego Pausado</h2>
+            <button id="resume" class="game-button">Continuar</button>
+            <button id="restart" class="game-button">Reiniciar</button>
+            <button id="exit" class="game-button">Salir</button>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <p>Desarrollado con ❤️ por Tu Nombre</p>
+        <div class="social-links">
+            <a href="https://github.com/tuusuario" target="_blank" rel="noopener">GitHub</a>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="scripts.js"></script>
 </body>
-<!-- Inclusión del archivo JavaScript -->
-<script src="scripts.js"></script>
 </html>
